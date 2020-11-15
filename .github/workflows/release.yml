@@ -26,7 +26,7 @@ jobs:
         draft: false
         prerelease: false
         body: |
-          Fix typo in usage instructions
+          Append a line break after the printed version number
   publish_assets:
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
@@ -37,16 +37,16 @@ jobs:
         config:
         - {
             name: "Windows", os: windows-latest, cc: "cl",
-            asset_name: shortpwd-1.0.1-windows-x86_64.zip, asset_type: application/zip,
+            asset_name: shortpwd-1.0.2-windows-x86_64.zip, asset_type: application/zip,
             environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
           }
         - {
             name: "Ubuntu",  os: ubuntu-latest, cc: "gcc",
-            asset_name: shortpwd-1.0.1-linux-x86_64.tar.xz, asset_type: application/x-gtar
+            asset_name: shortpwd-1.0.2-linux-x86_64.tar.xz, asset_type: application/x-gtar
           }
         - {
             name: "OSX",     os: macos-latest, cc: "clang",
-            asset_name: shortpwd-1.0.1-darwin-x86_64.tar.gz, asset_type: application/x-gtar
+            asset_name: shortpwd-1.0.2-darwin-x86_64.tar.gz, asset_type: application/x-gtar
           }
     steps:
     - name: Checkout
