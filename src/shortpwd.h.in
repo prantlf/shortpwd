@@ -1,0 +1,3 @@
+#define shortpwd_VERMAJ @shortpwd_VERSION_MAJOR@
+#define shortpwd_VERMIN @shortpwd_VERSION_MINOR@
+#define shortpwd_VERPAT @shortpwd_VERSION_PATCH@

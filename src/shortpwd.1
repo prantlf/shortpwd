@@ -1,0 +1,46 @@
+.TH shortpwd "1" "November 15, 2020" "" "shortpwd manual"
+
+.SH NAME
+shortpwd - trims the current directory with an ellipsis
+
+.SH SYNOPSIS
+.B shortpwd
+[-V|--version] [-h|--help]
+.I <leading>
+.I <trailing>
+.I [ellipsis]
+
+.SH DESCRIPTION
+shortpwd trims the current working directory to a maximum length
+by putting an ellipsis to the middle of the shortened result.
+
+.SH OPTIONS
+.B
+.IP "-V, --version"
+prints the version of the executable and exits
+.B
+.IP "-h, --help"
+prints the usage information and exits
+
+.in
+Specify the maximum count of leading and trailing characters.\n"
+The overall maximum length will be their sum plus the length\n"
+of an ellipsis (3 dots by default). Zero for either leading\n"
+or trailing count means no leading or trailing parts.\n"
+The home part directory will lbe replaced by \"~\" if present.\n\n"
+
+.SH EXAMPLES
+ $ cd ~/Sources/private/shortpwd
+ $ shortpwd 5 10
+ ~/Sou...e/shortpwd
+ $ shortpwd 0 12 ..
+ ..ate/shortpwd
+
+.SH BUGS
+shortpwd's bug tracker is located at <https://github.com/prantlf/shortpwd/issues>
+
+.SH DOCUMENTATION
+See the website for documentation <https://prantlf.github.io/shortpwd/>
+
+.SH AUTHOR
+Currently maintained by Ferdinand Prantl <prantlf@gmail.com>

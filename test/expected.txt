@@ -1,0 +1,6 @@
+$ shortpwd 0 9
+...pwd/build
+$ shortpwd 0 9 ''
+pwd/build
+$ shortpwd 0 9 ..
+..pwd/build
