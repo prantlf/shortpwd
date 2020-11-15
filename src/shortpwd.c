@@ -45,7 +45,7 @@ int main (int argc, char const * const * const argv) {
   if (argc == 2) {
     char const * const arg = argv[1];
     if (strcmp(arg, "-V") == 0 || strcmp(arg, "--version") == 0) {
-      printf("%d.%d.%d", shortpwd_VERMAJ, shortpwd_VERMIN, shortpwd_VERPAT);
+      printf("%d.%d.%d\n", shortpwd_VERMAJ, shortpwd_VERMIN, shortpwd_VERPAT);
       return 0;
     }
     if (strcmp(arg, "-h") == 0 || strcmp(arg, "--help") == 0) {
