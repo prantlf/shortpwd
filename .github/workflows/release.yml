@@ -1,0 +1,84 @@
+name: Release
+
+on:
+  push:
+    tags:
+    - 'v[0-9]+.*'
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  create_release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+    - name: Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+        body: |
+          Initial release
+  publish_assets:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    needs: create_release
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {
+            name: "Windows", os: windows-latest, cc: "cl",
+            asset_name: shortpwd-1.0.0-windows-x86_64.zip, asset_type: application/zip,
+            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+          }
+        - {
+            name: "Ubuntu",  os: ubuntu-latest, cc: "gcc",
+            asset_name: shortpwd-1.0.0-linux-x86_64.tar.xz, asset_type: application/x-gtar
+          }
+        - {
+            name: "OSX",     os: macos-latest, cc: "clang",
+            asset_name: shortpwd-1.0.0-darwin-x86_64.tar.gz, asset_type: application/x-gtar
+          }
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Build
+      run: |
+        cmake -E make_directory build
+        cd build
+        cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE --verbose ..
+        cmake --build . --config $BUILD_TYPE --verbose
+    - name: Test
+      working-directory: build
+      if: "!startsWith(matrix.config.os, 'windows')"
+      run: ctest -C $BUILD_TYPE --output-on-failure --verbose
+    - name: Package
+      working-directory: build
+      run: cpack -C $BUILD_TYPE --verbose
+    - name: Upload Archive
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create_release.outputs.upload_url }}
+        asset_name: ${{ matrix.config.asset_name }}
+        asset_path: build/${{ matrix.config.asset_name }}
+        asset_content_type: ${{ matrix.config.asset_type }}
+    - name: Upload Checksum
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create_release.outputs.upload_url }}
+        asset_name: ${{ matrix.config.asset_name }}.sha512
+        asset_path: build/${{ matrix.config.asset_name }}.sha512
+        asset_content_type: text/plain
