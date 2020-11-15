@@ -23,12 +23,20 @@ Otherwise you can [build and install from sources](#build).
 
     shortpwd [options] <leading> <trailing> [ellipsis]
 
-Specify the maximum count of leading and trailing characters. The overall maximum length will be their sum plus the length of an ellipsis (3 dots by default). Zero for either leading or trailing count means no leading or trailing parts. The home part directory will lbe replaced by "~\" if present.
+Specify the maximum count of leading and trailing characters. The overall maximum length will be their sum plus the length of an ellipsis (3 dots by default). Zero for either leading or trailing count means no leading or trailing parts. The home part directory will be replaced by "~\" if present.
 
 ### Options
 
     -V|--version  prints the version of the executable and exits
     -h|--help     prints the usage information and exits
+
+### Examples
+
+    $ cd ~/Sources/private/shortpwd
+    $ shortpwd 5 10
+    ~/Sou...e/shortpwd
+    $ shortpwd 0 12 ..
+    ..ate/shortpwd
 
 ## Build
 

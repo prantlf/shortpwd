@@ -18,7 +18,7 @@ void usage() {
     "  The overall maximum length will be their sum plus the length\n"
     "  of an ellipsis (3 dots by default). Zero for either leading\n"
     "  or trailing count means no leading or trailing parts.\n"
-    "  The home part directory will lbe replaced by \"~\" if present.\n\n"
+    "  The home part directory will be replaced by \"~\" if present.\n\n"
     "Options:\n"
     "  -V|--version  prints the version of the executable and exits\n\n"
     "  -h|--help     prints the usage information and exits\n\n"
