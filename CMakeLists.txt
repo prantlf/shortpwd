@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.10)
 
 file(READ "CHANGELOG.md" VER)
 string(REGEX MATCH "## ([.0-9]*)" _ ${VER})
