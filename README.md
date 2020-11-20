@@ -12,6 +12,15 @@ See [cutmidel] if you want to shorten an arbitrary text.
 
 ## Installation
 
+Mac users can use [Homebrew]:
+
+    brew install prantlf/tap/shortpwd
+
+Windows users can use [Scoop]:
+
+    scoop bucket add prantlf https://github.com/prantlf/scoop-bucket.git
+    scoop install prantlf/shortpwd
+
 Binaries for the latest versions of Linux, OSX and Windows are [available for download]. The archives contain an executable and a manpage to be unpacked to a directory like `/usr/local`.
 
     bin/shortpwd
@@ -57,3 +66,5 @@ You can also build debug this project in VS Code with the C/C++ and CMake extens
 
 [cutmidel]: https://github.com/prantlf/cutmidel
 [available for download]: https://github.com/prantlf/shortpwd/releases
+[Homebrew]: https://brew.sh/
+[Scoop]: https://scoop.sh/
