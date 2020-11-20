@@ -90,6 +90,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ needs.create_release.outputs.upload_url }}
-        asset_name: ${{ matrix.config.asset_name }}.sha512
-        asset_path: build/${{ matrix.config.asset_name }}.sha512
+        asset_name: ${{ matrix.config.asset_name }}.sha256
+        asset_path: build/${{ matrix.config.asset_name }}.sha256
         asset_content_type: text/plain
