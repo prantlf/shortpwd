@@ -10,9 +10,6 @@ on:
     - reopened
     - synchronize
 
-env:
-  BUILD_TYPE: Debug
-
 jobs:
   build:
     name: ${{ matrix.config.name }}
@@ -28,6 +25,8 @@ jobs:
         - { name: "Windows Latest MinGW", os: windows-latest, cc: "gcc" }
         - { name: "Ubuntu Latest GCC",    os: ubuntu-latest, cc: "gcc" }
         - { name: "OSX Latest Clang",     os: macos-latest, cc: "clang" }
+    env:
+      BUILD_TYPE: Debug
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -35,9 +34,9 @@ jobs:
       run: |
         cmake -E make_directory build
         cd build
-        cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE --verbose ..
-        cmake --build . --config $BUILD_TYPE --verbose
+        cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} --verbose ..
+        cmake --build . --config ${{ env.BUILD_TYPE }} --verbose
     - name: Test
       working-directory: build
       if: "!startsWith(matrix.config.os, 'windows')"
-      run: ctest -C $BUILD_TYPE --output-on-failure --verbose
+      run: ctest -C ${{ env.BUILD_TYPE }} --output-on-failure --verbose

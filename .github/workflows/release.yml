@@ -5,8 +5,6 @@ on:
     tags:
     - 'v[0-9]+.*'
 
-env:
-  BUILD_TYPE: Release
 
 jobs:
   create_release:
@@ -14,7 +12,19 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
+      version: ${{ steps.get_version.outputs.version }}
     steps:
+    - name: Version
+      id: get_version
+      run: echo "::set-output name=version::$(echo "${{ github.ref }}" | sed 's/[^.0-9]\+//')"
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Describe
+      run: |
+        CHANGELOG=$(awk -v ver=${{ steps.get_version.outputs.version }} '/## / { if (p) { exit }; if ($2 == ver) { p=1; next } } p' CHANGELOG.md)
+        echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+        echo "$CHANGELOG" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
     - name: Release
       id: create_release
       uses: actions/create-release@v1
@@ -25,8 +35,7 @@ jobs:
         release_name: Release ${{ github.ref }}
         draft: false
         prerelease: false
-        body: |
-          Append a line break after the printed version number
+        body: ${{ env.CHANGELOG }}
   publish_assets:
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
@@ -37,17 +46,19 @@ jobs:
         config:
         - {
             name: "Windows", os: windows-latest, cc: "cl",
-            asset_name: shortpwd-1.0.2-windows-x86_64.zip, asset_type: application/zip,
+            asset_name: shortpwd-${{ needs.create_release.outputs.version }}-windows-x86_64.zip, asset_type: application/zip,
             environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
           }
         - {
             name: "Ubuntu",  os: ubuntu-latest, cc: "gcc",
-            asset_name: shortpwd-1.0.2-linux-x86_64.tar.xz, asset_type: application/x-gtar
+            asset_name: shortpwd-${{ needs.create_release.outputs.version }}-linux-x86_64.tar.xz, asset_type: application/x-gtar
           }
         - {
             name: "OSX",     os: macos-latest, cc: "clang",
-            asset_name: shortpwd-1.0.2-darwin-x86_64.tar.gz, asset_type: application/x-gtar
+            asset_name: shortpwd-${{ needs.create_release.outputs.version }}-darwin-x86_64.tar.gz, asset_type: application/x-gtar
           }
+    env:
+      BUILD_TYPE: Release
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -55,15 +66,15 @@ jobs:
       run: |
         cmake -E make_directory build
         cd build
-        cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE --verbose ..
-        cmake --build . --config $BUILD_TYPE --verbose
+        cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} --verbose ..
+        cmake --build . --config ${{ env.BUILD_TYPE }} --verbose
     - name: Test
       working-directory: build
       if: "!startsWith(matrix.config.os, 'windows')"
-      run: ctest -C $BUILD_TYPE --output-on-failure --verbose
+      run: ctest -C ${{ env.BUILD_TYPE }} --output-on-failure --verbose
     - name: Package
       working-directory: build
-      run: cpack -C $BUILD_TYPE --verbose
+      run: cpack -C ${{ env.BUILD_TYPE }} --verbose
     - name: Upload Archive
       uses: actions/upload-release-asset@v1
       env:
