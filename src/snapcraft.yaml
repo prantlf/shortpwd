@@ -1,0 +1,30 @@
+name: shortpwd
+title: Short PWD
+base: core18
+version: '1.0.3'
+summary: Prints the current working directory trimmed by an ellipsis in the middle.
+description: |
+  Trims the current working directory to a maximum length by putting an ellipsis to the middle of the shortened result. For example:
+
+  $ cd /home/prantlf/Sources/private/shortpwd
+  $ shortpwd 5 10
+  ~/Sou...e/shortpwd
+
+grade: stable
+confinement: strict
+architectures:
+  - build-on: arm64
+  - build-on: amd64
+ 
+parts:
+  shortpwd:
+    plugin: cmake
+    source: https://github.com/prantlf/shortpwd.git
+    configflags: [
+      -DCMAKE_BUILD_TYPE=Release,
+      -DCMAKE_INSTALL_PREFIX=/usr
+    ]
+
+apps:
+  shortpwd:
+    command: bin/shortpwd
