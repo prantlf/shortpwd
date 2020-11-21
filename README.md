@@ -12,6 +12,10 @@ See [cutmidel] if you want to shorten an arbitrary text.
 
 ## Installation
 
+Linux users can use [Snapcraft]:
+
+    sudo snap install shortpwd
+
 Mac users can use [Homebrew]:
 
     brew install prantlf/tap/shortpwd
@@ -66,5 +70,6 @@ You can also build debug this project in VS Code with the C/C++ and CMake extens
 
 [cutmidel]: https://github.com/prantlf/cutmidel
 [available for download]: https://github.com/prantlf/shortpwd/releases
+[Snapcraft]: https://snapcraft.io/
 [Homebrew]: https://brew.sh/
 [Scoop]: https://scoop.sh/
